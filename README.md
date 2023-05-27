@@ -1,7 +1,7 @@
 
 # DDC Settings Tool
 
-This tool allows developers to configure the Local DDC Settings and the Shared DDC Settings for their UE4 project.
+This tool allows developers to configure the Local DDC Settings and the Shared DDC Settings for their Unreal Engine project.
 
 ## Other sources
 
