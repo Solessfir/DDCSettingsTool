@@ -6,6 +6,7 @@
 #include "Widgets/Input/SComboBox.h"
 #include "Misc/FileHelper.h"
 #include "DDCInfo.h"
+#include "DDCSettingsToolStyle.h"
 
 
 #define LOCTEXT_NAMESPACE "FDDCSettingsToolModule"
@@ -38,11 +39,11 @@ void SDDCSaveToIniPanel::Construct(const FArguments& InArgs, TWeakObjectPtr<UDDC
 	ChildSlot
 	[
 		SNew(SBorder)
-		.BorderImage(FEditorStyle::GetBrush("ToolPanel.GroupBorder"))
+		.BorderImage(FAppStyle::GetBrush("ToolPanel.GroupBorder"))
 		.Padding(2.0f)
 		[
 			SNew(SBorder)
-			.BorderImage(FEditorStyle::GetBrush("MessageLog.ListBorder"))
+			.BorderImage(FAppStyle::GetBrush("MessageLog.ListBorder"))
 			.BorderBackgroundColor(FLinearColor(0.1f, 0.1f, 0.4f, 0.5f))
 			.Padding(4.0f)
 			[
@@ -50,7 +51,7 @@ void SDDCSaveToIniPanel::Construct(const FArguments& InArgs, TWeakObjectPtr<UDDC
 				+ SVerticalBox::Slot()
 				.AutoHeight()
 				.Padding(0.0f, 8.0f, 0.0f, 0.0f)
-				.HAlign(EHorizontalAlignment::HAlign_Center)
+				.HAlign(HAlign_Center)
 				[
 					// category description
 					SNew(STextBlock)
@@ -58,7 +59,7 @@ void SDDCSaveToIniPanel::Construct(const FArguments& InArgs, TWeakObjectPtr<UDDC
 					.Text(LOCTEXT("CurrentBackendLabel", "Current DDC Backend in use:"))
 				]
 				+ SVerticalBox::Slot()
-				.HAlign(EHorizontalAlignment::HAlign_Center)
+				.HAlign(HAlign_Center)
 				.Padding(0.0f, 0.0f, 0.0f, 8.0f)
 				.AutoHeight()
 				[
@@ -68,18 +69,18 @@ void SDDCSaveToIniPanel::Construct(const FArguments& InArgs, TWeakObjectPtr<UDDC
 				]
 				+ SVerticalBox::Slot()
 				.AutoHeight()
-				.HAlign(EHorizontalAlignment::HAlign_Fill)
+				.HAlign(HAlign_Fill)
 				[
 					SNew(SHorizontalBox)
 					+ SHorizontalBox::Slot()
 					.FillWidth(1.0f)
 					[
 						SNew(SBorder)
-						.BorderImage(FEditorStyle::GetBrush("ToolPanel.GroupBorder"))
+						.BorderImage(FAppStyle::GetBrush("ToolPanel.GroupBorder"))
 						.Padding(2.0f)
 						[
 							SNew(SBorder)
-							.BorderImage(FEditorStyle::GetBrush("MessageLog.ListBorder"))
+							.BorderImage(FAppStyle::GetBrush("MessageLog.ListBorder"))
 							.BorderBackgroundColor(FLinearColor(0.1f, 0.1f, 0.4f, 0.7f))
 							[
 								SNew(SVerticalBox)
@@ -89,7 +90,7 @@ void SDDCSaveToIniPanel::Construct(const FArguments& InArgs, TWeakObjectPtr<UDDC
 								[
 										SNew(STextBlock)
 										.Text(LOCTEXT("SaveChangesLabel", "Save changes:"))
-										.Font(FEditorStyle::GetFontStyle("PropertyWindow.NormalFont"))
+										.Font(FAppStyle::GetFontStyle("PropertyWindow.NormalFont"))
 								]
 								+ SVerticalBox::Slot()
 								.AutoHeight()
@@ -116,7 +117,7 @@ void SDDCSaveToIniPanel::Construct(const FArguments& InArgs, TWeakObjectPtr<UDDC
 										SNew(SButton)
 										.Text(LOCTEXT("SaveButtonLabel", "Save"))
 										.ToolTipText(LOCTEXT("SaveButton_Tooltip", "Save changes to the specified config file."))
-//										.IsEnabled(TAttribute<bool>(this, &SDDCSaveToIniPanel::IsSaveEnabled)) // Maybe do later...?
+										//.IsEnabled(TAttribute<bool>(this, &SDDCSaveToIniPanel::IsSaveEnabled)) // Maybe do later...?
 										.OnClicked_Lambda([this]()
 										{
 											this->SaveSettingsToIni();
@@ -140,8 +141,6 @@ SDDCSaveToIniPanel::~SDDCSaveToIniPanel()
 	FCoreUObjectDelegates::OnObjectPropertyChanged.Remove(OnObjChangedDelegateHandle);
 }
 
-
-
 void SDDCSaveToIniPanel::GatherIniFilePaths()
 {
 	FString ProjectDirUserIniFile = FPaths::ConvertRelativePathToFull(FPaths::ProjectConfigDir() / TEXT("UserEngine.ini"));
@@ -159,7 +158,6 @@ void SDDCSaveToIniPanel::GatherIniFilePaths()
 	// Default to the engine saved xml
 	SelectedIniPath = AvailableIniPaths[0];
 }
-
 
 void SDDCSaveToIniPanel::SaveSettingsToIni() const
 {
@@ -187,14 +185,13 @@ void SDDCSaveToIniPanel::SaveSettingsToIni() const
 	GConfig->Flush(false, *SelectedIniPath);	
 }
 
-
 TSharedRef<SWidget> SDDCSaveToIniPanel::GenerateIniFileComboBoxWidget(TSharedPtr<FString> InItem)
 {
 	return
 		SNew(SVerticalBox)
 		+ SVerticalBox::Slot()
 		.Padding(2.0f)
-		.HAlign(EHorizontalAlignment::HAlign_Left)
+		.HAlign(HAlign_Left)
 		[
 			SNew(STextBlock)
 			.Text(FText::FromString(*InItem))
@@ -210,26 +207,21 @@ void SDDCSaveToIniPanel::HandleIniFileSelectionChanged(TSharedPtr<FString> InSel
 	}
 }
 
-
 FText SDDCSaveToIniPanel::GetSelectedIniFileNameText() const
 {
 	return FText::FromString(*this->SelectedIniPath);
 }
 
-
 void SDDCSaveToIniPanel::OnObjPropertyChanged(UObject* ObjectBeingModified, FPropertyChangedEvent& PropertyChangedEvent)
 {
-	if (ObjectBeingModified == LocalDdcObj || ObjectBeingModified == LocalDdcObj)
+	if (ObjectBeingModified == LocalDdcObj || ObjectBeingModified == SharedDdcObj)
 	{
 		bIsSaveEnabled = true;
 	}
 }
 
-
 bool SDDCSaveToIniPanel::IsSaveEnabled() const
 {
 	return bIsSaveEnabled;
 }
-
-
 #undef LOCTEXT_NAMESPACE

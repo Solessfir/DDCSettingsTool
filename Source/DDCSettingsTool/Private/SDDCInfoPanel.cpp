@@ -1,14 +1,12 @@
 // Copyright 2020 - Trifolium Digital Limited
 
 #include "SDDCInfoPanel.h"
-
+#include "DDCSettingsToolStyle.h"
 
 #define LOCTEXT_NAMESPACE "FDDCSettingsToolModule"
 
-
 ///////////////////////////////////////////////////////////////////////
 // SDDCInfoPanel
-
 
 void SDDCInfoPanel::Construct(const FArguments& InArgs, const FName& InCacheName, TWeakObjectPtr<UDDCInfo> InCacheInformation)
 {
@@ -29,7 +27,7 @@ void SDDCInfoPanel::Construct(const FArguments& InArgs, const FName& InCacheName
 			DetailsViewArgs.bShowOptions = true;
 			DetailsViewArgs.bShowModifiedPropertiesOption = false;
 			DetailsViewArgs.bAllowMultipleTopLevelObjects = true;
-			DetailsViewArgs.bShowActorLabel = false;
+			DetailsViewArgs.bShowObjectLabel = false;
 			DetailsViewArgs.bCustomNameAreaLocation = true;
 			DetailsViewArgs.bCustomFilterAreaLocation = true;
 			DetailsViewArgs.NameAreaSettings = FDetailsViewArgs::ObjectsUseNameArea;
@@ -43,8 +41,8 @@ void SDDCInfoPanel::Construct(const FArguments& InArgs, const FName& InCacheName
 	else
 	{
 		InfoView = SNew(SBox)
-			.HAlign(EHorizontalAlignment::HAlign_Center)
-			.VAlign(EVerticalAlignment::VAlign_Fill)
+			.HAlign(HAlign_Center)
+			.VAlign(VAlign_Fill)
 			.Padding(16.0f)
 			[
 				SNew(STextBlock)
@@ -56,16 +54,16 @@ void SDDCInfoPanel::Construct(const FArguments& InArgs, const FName& InCacheName
 	ChildSlot
 	[
 		SNew(SBorder)
-		.BorderImage(FEditorStyle::GetBrush("ToolPanel.GroupBorder"))
+		.BorderImage(FAppStyle::GetBrush("ToolPanel.GroupBorder"))
 		[
 			SNew(SBorder)
-			.BorderImage(FEditorStyle::GetBrush("MessageLog.ListBorder"))
+			.BorderImage(FAppStyle::GetBrush("MessageLog.ListBorder"))
 			.BorderBackgroundColor(FLinearColor(0.1f, 0.1f, 0.4f, 0.5f))
 			.Padding(FMargin(2.0f, 2.0f, 2.0f, 2.0f))
 			[
 				SNew(SVerticalBox)
 				+ SVerticalBox::Slot()
-				.HAlign(EHorizontalAlignment::HAlign_Center)
+				.HAlign(HAlign_Center)
 				.AutoHeight()
 				[
 					SNew(STextBlock)
@@ -81,6 +79,4 @@ void SDDCInfoPanel::Construct(const FArguments& InArgs, const FName& InCacheName
 		]
 	];
 }
-
-
 #undef LOCTEXT_NAMESPACE
